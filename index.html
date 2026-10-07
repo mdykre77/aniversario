@@ -1,0 +1,1827 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Un año contigo</title>
+
+<style>
+
+/* =========================================================
+   RESET
+========================================================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    background:#02040a;
+    scroll-behavior:smooth;
+}
+
+body{
+    min-height:100vh;
+    background:
+        radial-gradient(circle at 50% 20%,rgba(70,85,130,.14),transparent 38%),
+        linear-gradient(180deg,#02040a 0%,#050813 50%,#02040a 100%);
+    color:#f4f5f8;
+    font-family:Georgia,"Times New Roman",serif;
+    overflow-x:hidden;
+}
+
+body.locked{
+    overflow:hidden;
+    height:100vh;
+}
+
+
+/* =========================================================
+   FONDO DE ESTRELLAS FIJAS
+========================================================= */
+
+.stars{
+    position:fixed;
+    inset:0;
+    width:100%;
+    height:100%;
+    pointer-events:none;
+    z-index:0;
+    opacity:.9;
+
+    background-image:
+        radial-gradient(1px 1px at 5% 10%,rgba(255,255,255,.9),transparent),
+        radial-gradient(1px 1px at 12% 35%,rgba(255,255,255,.8),transparent),
+        radial-gradient(2px 2px at 20% 75%,rgba(255,255,255,.8),transparent),
+        radial-gradient(1px 1px at 28% 18%,rgba(255,255,255,.9),transparent),
+        radial-gradient(2px 2px at 35% 55%,rgba(255,255,255,.7),transparent),
+        radial-gradient(1px 1px at 43% 87%,rgba(255,255,255,.9),transparent),
+        radial-gradient(2px 2px at 51% 30%,rgba(255,255,255,.8),transparent),
+        radial-gradient(1px 1px at 58% 68%,rgba(255,255,255,.8),transparent),
+        radial-gradient(2px 2px at 66% 12%,rgba(255,255,255,.9),transparent),
+        radial-gradient(1px 1px at 73% 46%,rgba(255,255,255,.8),transparent),
+        radial-gradient(2px 2px at 81% 80%,rgba(255,255,255,.8),transparent),
+        radial-gradient(1px 1px at 89% 25%,rgba(255,255,255,.9),transparent),
+        radial-gradient(2px 2px at 96% 65%,rgba(255,255,255,.7),transparent);
+
+    animation:starDrift 20s linear infinite;
+}
+
+@keyframes starDrift{
+    from{
+        transform:translateY(0);
+    }
+    to{
+        transform:translateY(15px);
+    }
+}
+
+
+/* =========================================================
+   LLUVIA DE ESTRELLAS / BOLITAS
+========================================================= */
+
+.falling-stars{
+    position:fixed;
+    inset:0;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    pointer-events:none;
+    z-index:2;
+}
+
+.falling-star{
+    position:absolute;
+    top:-20px;
+    border-radius:50%;
+    background:#fff;
+
+    box-shadow:
+        0 0 5px rgba(255,255,255,.9),
+        0 0 10px rgba(255,255,255,.45);
+
+    opacity:.7;
+
+    animation-name:fallStar;
+    animation-timing-function:linear;
+    animation-iteration-count:infinite;
+}
+
+@keyframes fallStar{
+
+    0%{
+        transform:
+            translate3d(0,0,0)
+            rotate(0deg);
+        opacity:0;
+    }
+
+    8%{
+        opacity:.9;
+    }
+
+    50%{
+        opacity:.75;
+    }
+
+    92%{
+        opacity:.65;
+    }
+
+    100%{
+        transform:
+            translate3d(var(--drift),110vh,0)
+            rotate(180deg);
+        opacity:0;
+    }
+}
+
+
+/* =========================================================
+   ESTRELLAS FUGACES
+========================================================= */
+
+.shooting-star{
+    position:fixed;
+    width:150px;
+    height:2px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255,255,255,.9),
+            transparent
+        );
+
+    filter:
+        drop-shadow(0 0 5px rgba(255,255,255,.7));
+
+    transform:rotate(-35deg);
+
+    opacity:0;
+
+    pointer-events:none;
+
+    z-index:3;
+
+    animation:shooting 9s linear infinite;
+}
+
+.shooting-star:nth-of-type(1){
+    top:18%;
+    left:-180px;
+    animation-delay:1s;
+}
+
+.shooting-star:nth-of-type(2){
+    top:55%;
+    left:-180px;
+    animation-delay:5s;
+}
+
+@keyframes shooting{
+
+    0%{
+        transform:
+            translate(0,0)
+            rotate(-35deg);
+        opacity:0;
+    }
+
+    7%{
+        opacity:.9;
+    }
+
+    18%{
+        transform:
+            translate(120vw,45vh)
+            rotate(-35deg);
+        opacity:0;
+    }
+
+    100%{
+        opacity:0;
+    }
+}
+
+
+/* =========================================================
+   LUNA BLANCA
+========================================================= */
+
+.moon{
+    position:fixed;
+
+    width:250px;
+    height:250px;
+
+    right:-75px;
+    top:8%;
+
+    border-radius:50%;
+
+    background:
+        radial-gradient(
+            circle at 32% 30%,
+            rgba(255,255,255,.98),
+            rgba(248,248,248,.86) 35%,
+            rgba(225,225,230,.65) 58%,
+            rgba(190,195,205,.28) 75%,
+            transparent 82%
+        );
+
+    box-shadow:
+        0 0 25px rgba(255,255,255,.2),
+        0 0 65px rgba(235,235,245,.15),
+        0 0 120px rgba(220,225,240,.08);
+
+    opacity:.62;
+
+    pointer-events:none;
+
+    z-index:1;
+
+    transition:transform .3s ease;
+}
+
+
+/* =========================================================
+   BARRA DE PROGRESO
+========================================================= */
+
+.progress{
+    position:fixed;
+
+    top:0;
+    left:0;
+
+    width:100%;
+    height:4px;
+
+    background:rgba(255,255,255,.05);
+
+    z-index:100;
+
+    opacity:0;
+
+    transition:opacity .6s ease;
+}
+
+body.unlocked .progress{
+    opacity:1;
+}
+
+.progress-bar{
+    width:0%;
+    height:100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(255,255,255,.35),
+            rgba(255,255,255,.95),
+            rgba(210,220,255,.7)
+        );
+
+    box-shadow:
+        0 0 12px rgba(255,255,255,.5);
+}
+
+
+/* =========================================================
+   PORTADA
+========================================================= */
+
+.cover{
+    position:fixed;
+
+    inset:0;
+
+    width:100%;
+    height:100vh;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+
+    text-align:center;
+
+    padding:30px;
+
+    z-index:50;
+
+    background:
+        radial-gradient(
+            circle at center,
+            rgba(15,20,38,.30),
+            rgba(1,3,8,.90)
+        );
+
+    opacity:1;
+    visibility:visible;
+    pointer-events:auto;
+
+    transition:
+        opacity .8s ease,
+        transform .9s ease;
+}
+
+.cover.opened{
+    opacity:0;
+    transform:scale(1.08);
+    pointer-events:none;
+}
+
+.cover.hidden{
+    display:none !important;
+}
+
+.cover-date{
+    font-family:Arial,sans-serif;
+
+    font-size:.78rem;
+
+    letter-spacing:5px;
+
+    text-transform:uppercase;
+
+    color:rgba(255,255,255,.55);
+
+    margin-bottom:30px;
+}
+
+.cover h1{
+    font-size:
+        clamp(3rem,9vw,7rem);
+
+    font-weight:400;
+
+    letter-spacing:-3px;
+
+    line-height:.95;
+
+    text-shadow:
+        0 0 30px rgba(255,255,255,.08);
+
+    margin-bottom:24px;
+}
+
+.cover-subtitle{
+    max-width:550px;
+
+    font-size:
+        clamp(1rem,2vw,1.25rem);
+
+    line-height:1.7;
+
+    color:rgba(255,255,255,.62);
+
+    margin-bottom:45px;
+}
+
+
+/* =========================================================
+   BOTÓN
+========================================================= */
+
+.open-button{
+    border:1px solid rgba(255,255,255,.4);
+
+    background:rgba(255,255,255,.035);
+
+    color:#fff;
+
+    padding:15px 38px;
+
+    border-radius:100px;
+
+    font-family:Arial,sans-serif;
+
+    font-size:.75rem;
+
+    letter-spacing:4px;
+
+    cursor:pointer;
+
+    transition:
+        background .3s ease,
+        transform .3s ease,
+        box-shadow .3s ease,
+        border-color .3s ease;
+}
+
+.open-button:hover{
+    background:rgba(255,255,255,.1);
+
+    border-color:
+        rgba(255,255,255,.75);
+
+    transform:translateY(-3px);
+
+    box-shadow:
+        0 8px 35px rgba(255,255,255,.08);
+}
+
+.open-button:active{
+    transform:scale(.97);
+}
+
+
+/* =========================================================
+   PARTICULAS AL ABRIR
+========================================================= */
+
+.particle{
+    position:fixed;
+
+    width:5px;
+    height:5px;
+
+    border-radius:50%;
+
+    background:#fff;
+
+    pointer-events:none;
+
+    z-index:100;
+
+    box-shadow:
+        0 0 12px rgba(255,255,255,.9);
+
+    animation:
+        particleFly 1.4s ease-out forwards;
+}
+
+@keyframes particleFly{
+
+    0%{
+        transform:
+            translate(0,0)
+            scale(1);
+
+        opacity:1;
+    }
+
+    100%{
+        transform:
+            translate(var(--x),var(--y))
+            scale(0);
+
+        opacity:0;
+    }
+}
+
+
+/* =========================================================
+   CARTA PRINCIPAL
+========================================================= */
+
+#letterMain{
+    position:relative;
+
+    z-index:10;
+
+    width:100%;
+
+    padding:
+        120px 20px;
+
+    visibility:hidden;
+
+    opacity:0;
+
+    transition:
+        opacity .8s ease;
+}
+
+body.unlocked #letterMain{
+    visibility:visible;
+    opacity:1;
+}
+
+
+/* =========================================================
+   ENCABEZADO
+========================================================= */
+
+.letter-header{
+    width:min(900px,100%);
+
+    margin:
+        0 auto 100px;
+
+    text-align:center;
+}
+
+.letter-header .small-date{
+    font-family:Arial,sans-serif;
+
+    font-size:.75rem;
+
+    letter-spacing:4px;
+
+    color:
+        rgba(255,255,255,.45);
+
+    margin-bottom:25px;
+}
+
+.letter-header h2{
+    font-size:
+        clamp(2.7rem,7vw,5.5rem);
+
+    font-weight:400;
+
+    line-height:1;
+
+    margin-bottom:25px;
+}
+
+.letter-header p{
+    font-size:1rem;
+
+    color:
+        rgba(255,255,255,.5);
+
+    letter-spacing:1px;
+}
+
+
+/* =========================================================
+   TEXTO
+========================================================= */
+
+.letter{
+    width:min(850px,100%);
+
+    margin:auto;
+}
+
+.letter p{
+    font-size:
+        clamp(1.05rem,1.6vw,1.22rem);
+
+    line-height:2;
+
+    color:
+        rgba(245,245,248,.86);
+
+    margin-bottom:38px;
+
+    opacity:0;
+
+    transform:translateY(35px);
+
+    transition:
+        opacity 1s ease,
+        transform 1s ease;
+}
+
+.letter p.visible{
+    opacity:1;
+    transform:translateY(0);
+}
+
+
+/* =========================================================
+   FRASES DESTACADAS
+========================================================= */
+
+.highlight{
+    position:relative;
+
+    margin:
+        65px 0;
+
+    padding:
+        35px 30px;
+
+    border-top:
+        1px solid
+        rgba(255,255,255,.15);
+
+    border-bottom:
+        1px solid
+        rgba(255,255,255,.15);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,255,255,.035),
+            rgba(255,255,255,.008)
+        );
+
+    overflow:hidden;
+
+    opacity:0;
+
+    transform:
+        translateY(35px)
+        scale(.98);
+
+    transition:
+        opacity 1s ease,
+        transform 1s ease;
+}
+
+.highlight::before{
+    content:"";
+
+    position:absolute;
+
+    left:-100%;
+    top:0;
+
+    width:100%;
+    height:1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255,255,255,.8),
+            transparent
+        );
+
+    animation:
+        highlightLine 4s ease-in-out infinite;
+}
+
+@keyframes highlightLine{
+
+    0%{
+        left:-100%;
+    }
+
+    50%{
+        left:100%;
+    }
+
+    100%{
+        left:100%;
+    }
+}
+
+.highlight::after{
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    background:
+        radial-gradient(
+            circle at 50% 0%,
+            rgba(255,255,255,.07),
+            transparent 55%
+        );
+
+    pointer-events:none;
+}
+
+.highlight.visible{
+    opacity:1;
+
+    transform:
+        translateY(0)
+        scale(1);
+}
+
+.highlight-text{
+    position:relative;
+
+    z-index:2;
+
+    font-size:
+        clamp(1.25rem,2.5vw,1.65rem);
+
+    line-height:1.75;
+
+    text-align:center;
+
+    font-style:italic;
+
+    color:#fff;
+
+    text-shadow:
+        0 0 20px rgba(255,255,255,.08);
+}
+
+
+/* =========================================================
+   FINAL
+========================================================= */
+
+.final{
+    width:min(850px,100%);
+
+    margin:
+        120px auto 0;
+
+    padding:
+        70px 20px;
+
+    text-align:center;
+
+    border-top:
+        1px solid
+        rgba(255,255,255,.12);
+}
+
+.final h3{
+    font-size:
+        clamp(2.3rem,6vw,4.5rem);
+
+    font-weight:400;
+
+    line-height:1.1;
+
+    margin-bottom:25px;
+}
+
+.final p{
+    font-size:1.1rem;
+
+    color:
+        rgba(255,255,255,.55);
+
+    letter-spacing:1px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:700px){
+
+    .moon{
+        width:170px;
+        height:170px;
+
+        right:-65px;
+        top:8%;
+    }
+
+    .cover h1{
+        letter-spacing:-2px;
+    }
+
+    #letterMain{
+        padding:
+            90px 18px 80px;
+    }
+
+    .letter p{
+        font-size:1.03rem;
+
+        line-height:1.9;
+
+        margin-bottom:32px;
+    }
+
+    .highlight{
+        margin:50px 0;
+
+        padding:30px 20px;
+    }
+
+    .highlight-text{
+        font-size:1.18rem;
+    }
+}
+.final-message{
+    text-align:center;
+    color:rgba(255,255,255,.75);
+    line-height:1.8;
+    margin-top:45px;
+}
+
+.final-message span{
+    display:inline-block;
+    font-size:1.3rem;
+    font-weight:500;
+    color:#fff;
+    margin-bottom:8px;
+    letter-spacing:.2px;
+}
+
+.final-message small{
+    display:inline-block;
+    font-size:1.05rem;
+    font-weight:400;
+    color:rgba(255,255,255,.65);
+    line-height:1.7;
+    max-width:700px;
+}
+.finale{
+    position:relative;
+    min-height:430px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    margin-top:90px;
+    margin-bottom:120px;
+}
+
+.final-message{
+    position:relative;
+    z-index:10;
+    text-align:center;
+    color:rgba(255,255,255,.75);
+    line-height:1.8;
+    margin:0;
+    max-width:750px;
+    padding:0 25px;
+}
+
+.final-message span{
+    display:inline-block;
+    font-size:1.3rem;
+    font-weight:500;
+    color:#fff;
+    margin-bottom:8px;
+    letter-spacing:.2px;
+}
+
+.final-message small{
+    display:inline-block;
+    font-size:1.05rem;
+    font-weight:400;
+    color:rgba(255,255,255,.65);
+    line-height:1.7;
+    max-width:700px;
+}
+
+/* Zona de fuegos artificiales */
+.fireworks{
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    z-index:2;
+}
+
+/* Cada explosión */
+.firework{
+    position:absolute;
+    width:5px;
+    height:5px;
+    border-radius:50%;
+    background:white;
+    box-shadow:0 0 10px 2px rgba(255,255,255,.9);
+    animation:firework-explode 1.8s ease-out forwards;
+}
+
+.firework::before,
+.firework::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    width:3px;
+    height:3px;
+    border-radius:50%;
+    background:white;
+    box-shadow:
+        0 -55px 2px 1px rgba(255,255,255,.9),
+        39px -39px 2px 1px rgba(255,255,255,.85),
+        55px 0 2px 1px rgba(255,255,255,.9),
+        39px 39px 2px 1px rgba(255,255,255,.8),
+        0 55px 2px 1px rgba(255,255,255,.9),
+        -39px 39px 2px 1px rgba(255,255,255,.8),
+        -55px 0 2px 1px rgba(255,255,255,.9),
+        -39px -39px 2px 1px rgba(255,255,255,.85);
+}
+
+.firework::after{
+    transform:rotate(22.5deg);
+    opacity:.8;
+}
+
+@keyframes firework-explode{
+    0%{
+        transform:scale(.2);
+        opacity:0;
+    }
+
+    15%{
+        opacity:1;
+    }
+
+    70%{
+        transform:scale(1);
+        opacity:1;
+    }
+
+    100%{
+        transform:scale(1.25);
+        opacity:0;
+    }
+}
+
+</style>
+</head>
+
+
+<body class="locked">
+
+
+<!-- =====================================================
+     FONDO
+===================================================== -->
+
+<div class="stars"></div>
+
+<div class="falling-stars" id="fallingStars"></div>
+
+<div class="shooting-star"></div>
+<div class="shooting-star"></div>
+
+<div class="moon"></div>
+
+
+<!-- =====================================================
+     BARRA
+===================================================== -->
+
+<div class="progress">
+    <div class="progress-bar"></div>
+</div>
+
+
+<!-- =====================================================
+     PORTADA
+===================================================== -->
+
+<section class="cover" id="cover">
+
+    <div class="cover-date">
+        07/10/2025 — 07/10/2026
+    </div>
+
+    <h1>
+        un año de amor, distancia y lore xdd
+    </h1>
+
+    <p class="cover-subtitle">
+        Hay cosas que no caben en una conversación,
+        así que decidí escribirlas.
+    </p>
+
+    <button
+        class="open-button"
+        id="openButton"
+    >
+        ABRIR
+    </button>
+
+</section>
+
+
+<!-- =====================================================
+     CARTA
+===================================================== -->
+
+<main id="letterMain">
+
+<header class="letter-header">
+
+    <h2>
+        mi humilde declaración sobre cuanto te amo.
+    </h2>
+
+</header>
+
+
+<article class="letter">
+
+
+<p>
+Hoy cumplimos un año. No sé cómo explicar lo que significa para mí decir eso, porque al pensarlo parece muchísimo tiempo, pero al recordar todo lo vivido siento que pasó demasiado rápido. Un año, lleno de conversaciones, momentos y recuerdos que poco a poco terminaron formando parte de mí. Es extraño cómo funciona el tiempo cuando amas a alguien: hay días que desaparecen en un instante y otros en los que unas horas parecen interminables. Hay días en los que quisiera detener el reloj para quedarme un poco más en los momentos felices, y otros en los que quisiera adelantarlo para llegar al momento en que ya no tengamos que esperar tanto para estar juntos. Supongo que esa es una de las cosas que he aprendido este año: que amar a alguien también es aprender a convivir con el tiempo, con la espera y con lo que no podemos controlar.
+</p>
+
+<p>
+Por eso este aniversario significa tanto. No solo celebro que llevamos un año juntos, también pienso en todo lo que tuvo que pasar para llegar hasta aquí. Pienso en cómo empezamos, en esas conversaciones que poco a poco te volvieron alguien tan importante para mí, en las cosas que dijimos sin saber cuánto llegaríamos a significar el uno para el otro, en los momentos bonitos, en los días difíciles y en todas las veces que nos hemos extrañado. Y a veces me cuesta creer que hace un año todavía no sabía cuánto iba a cambiar mi vida después de conocerte. Si alguien me hubiera dicho entonces que terminarías siendo la primera persona en la que pienso cuando me pasa algo, cuando estoy feliz, cuando estoy mal o simplemente cuando necesito sentirme tranquila, probablemente no lo habría entendido. Pero ahora es así. Te volviste parte de mis días casi sin que me diera cuenta.
+</p>
+
+<p>
+Creo que te amo demasiado. A veces me desconcierta darme cuenta de cuánto te quiero, porque nunca había querido a alguien así. No sé si alguna vez pueda explicarlo exactamente, porque cada vez que intento ponerlo en palabras siento que me quedo corta. Decir “te amo” parece demasiado pequeño para todo lo que significa cuando lo digo pensando en ti. Te amo con cada átomo de mi ser, con cada pensamiento que aparece sin que lo llame, con cada parte de mí que de alguna manera terminó encontrando un lugar donde sentirse acompañada. Eres lo mejor que me ha pasado en la vida y todavía me parece increíble poder decirlo después de todo este tiempo.
+</p>
+
+<div class="highlight">
+    <div class="highlight-text">
+        Contigo no experimenté solamente mariposas; sentí fuegos artificiales iluminando lugares de mí que antes estaban completamente a oscuras. Y, sinceramente, qué pinche necesidad de que seas tan increíblee loll xddd.
+    </div>
+</div>
+
+<p>
+No sé cómo hacer que el tiempo duela menos. Hay noches en las que quisiera cerrar los ojos y abrirlos solo cuando ya no hubiera kilómetros entre nosotros. A veces me quedo maldiciendo la vida por ponernos tan lejos, porque hay momentos en los que simplemente quiero tenerte aquí y no puedo. Me pesa extrañarte. Hay una angustia dulce en no tenerte cerca, porque aunque duele, también existe algo bonito en saber que todo ese vacío tiene tu nombre. Te llevo conmigo incluso cuando no estás. A veces siento que te llevo metido bajo las costillas, en esa parte de mí que se despierta cuando algo me recuerda a ti. Tal vez la distancia nos cuente los días, pero el amor no sabe contar de la misma manera.
+</p>
+
+<div class="highlight">
+    <div class="highlight-text">
+        Te extraño los lunes grises, las tardes muertas, las madrugadas en las que me gustaría escucharte y no puedo. A donde voy, de alguna manera camino con tu sombra al lado
+    </div>
+</div>
+
+<p>
+Miro una calle cualquiera, un café en penumbra, una esquina vacía o un lugar bonito y muchas veces me pregunto cómo sería si tú estuvieras aquí. Cómo cambiaría un día completamente normal con solo tenerte a mi lado. Me pesa pensar en todos esos abrazos que quisiera darte y que por ahora no son posibles, en todas las veces que quisiera sentarme a tu lado sin pensar cuánto tiempo tenemos antes de despedirnos otra vez. Me pesa imaginar todas esas cosas tan normales que podríamos hacer juntos y que, por la distancia, terminan pareciendo enormes. Caminar juntos, compartir una comida, escuchar una canción, hablar de cualquier tontería, reírnos de algo que nadie más entendería, quedarnos en silencio sin que ese silencio tenga que terminar porque alguno tiene que irse.
+</p>
+
+<div class="highlight">
+    <div class="highlight-text">
+        A veces pienso que todos los días te extraño como las estrellas extrañan al sol cuando llega el amanecer.
+    </div>
+</div>
+
+<p>
+Y quizá eso es lo que más me confunde: puedo estar sufriendo mucho por extrañarte y, aun así, sentirme afortunada de tener un amor que me haga experimentar tanto. Porque si tuviera que elegir entre no sentir nada y vivir todo esto, incluso con la parte difícil, no cambiaría haberte encontrado. No quiero que todo lo que siento termine convirtiéndose solamente en tristeza. No quiero recordar este año únicamente por la distancia. También quiero recordar todo lo que sí tuvimos: cada conversación que nos acercó aunque estuviéramos lejos, cada recuerdo, cada palabra bonita, cada momento en el que me hiciste sentir comprendida, cada vez que encontré una razón para sonreír gracias a ti. Quiero recordar que entre tantas personas, lugares y caminos, nuestros caminos terminaron cruzándose.
+</p>
+
+<p>
+A veces me pregunto qué habría pasado si nunca nos hubiéramos conocido. Qué personas habríamos conocido, qué caminos habríamos tomado, qué cosas habríamos vivido. Pero prefiero quedarme con esta versión de las cosas, con la que nos encontramos, con la que hoy puedo escribirte después de un año y decirte que eres una de las personas más importantes de mi vida.
+</p>
+
+<div class="highlight">
+    <div class="highlight-text">
+        Eres la respuesta a una nostalgia que ni siquiera sabía que tenía. Eres el alivio de muchos de mis inviernos y la promesa de una primavera que quisiera que no terminara.
+    </div>
+</div>
+
+<p>
+En ti encontré algo parecido a un hogar, no porque crea que una persona pueda solucionar absolutamente todo, sino porque contigo descubrí un lugar donde puedo ser yo misma.
+</p>
+
+<p>
+Y eso también es algo que agradezco muchísimo. Contigo aprendí lo bonito que es sentirse querida de verdad y lo mucho que puede significar una persona en tan poco tiempo. Amo cada detalle tuyo, incluso esos que probablemente tú consideras insignificantes. Amo la manera en la que me hablas, la manera en la que consigues hacerme sentir cerca de ti, y hacer que las cosas parezcan un poquito más fáciles. Hay algo en ti que me hace experimentar una conexión diferente, algo que nunca había vivido antes y que no quiero perder. Tal vez por eso me parece tan absurdo que una persona pueda llegar a ocupar tanto espacio en la vida de otra sin darse cuenta del momento exacto en que ocurrió.
+</p>
+
+<p>
+Porque una relación no está hecha solamente de días perfectos. También está hecha de paciencia, de entenderse, de equivocarse, de aprender a escuchar, de tener conversaciones que a veces no son fáciles y de descubrir que la persona que amas no es una idea perfecta, sino alguien real, con sus propias emociones, miedos, defectos y días malos. Yo también tengo mis propios miedos. A veces siento demasiado, a veces pienso demasiado y a veces mi cabeza puede hacerme imaginar cosas que ni siquiera están ocurriendo. A veces puedo ser difícil de entender, puedo equivocarme, puedo no saber cómo decir lo que siento o terminar haciendo algo que no quería hacer. Y sé que no siempre sé cómo sostener todo lo que llevo dentro. Pero si hay algo que quiero que sepas es que, incluso con mis errores y mis torpezas, nunca ha sido mentira lo que siento por ti.
+</p>
+
+<div class="highlight">
+    <div class="highlight-text">
+        Heme aquí. He aquí el corazón que tanto te ama.
+    </div>
+</div>
+
+<p>
+No hay dobleces aquí, no hay artificios ni discursos ensayados para convencerte. Es un corazón que se equivoca, sí. Que sabe a sal, a desacierto y a torpeza. Que a veces tropieza con sus propias manos y camina a ciegas cuando debería haber guardado silencio. Que puede lastimar sin querer por la simple imprudencia de no saber cómo sostener algo que considera tan importante. Pero también es un corazón que no aprendió a defenderse de tu luz, por eso todavía estoy aprendiendo a quererte de la mejor manera que sé.
+</p>
+
+<p>
+No quiero conocerte solamente cuando estás feliz o cuando todo está bien. Quiero conocer tus días buenos y tus días malos, aquello que te hace reír y aquello que te preocupa, tus sueños, tus inseguridades, tus recuerdos, tus ideas, las cosas que todavía no le has contado a nadie y hasta esas partes de ti que quizá ni tú entiendes completamente. Quiero ser testigo de ti: de tu mirada, de tus enfados, de tus palabras juguetonas y también de ese silencio cargado de complicidad que aparece cuando no hace falta decir nada.
+</p>
+
+<p>
+Me gustaría estar presente en lo que vayas viviendo, acompañarte cuando algo te pese, celebrar contigo cuando algo te salga bien y escucharte cuando necesites hablar, incluso cuando no tenga una solución para darte. Saber qué cosas te emocionan, cuáles te dan miedo, cuáles consiguen sacarte una sonrisa después de un día horrible y cuáles son esas pequeñas cosas que quizá nadie más nota de ti. No porque necesite saberlo todo, sino porque todavía hay muchísimo de ti que me queda por descubrir.
+</p>
+
+<p>
+Y también está todo lo que todavía no existe. Me gustaría conocer cómo vas a cambiar con los años, qué sueños vas a tener, qué cosas vas a buscar y cuáles terminarás dejando atrás. Conocer esas versiones tuyas que todavía no existen y dejar que tú también conozcas las mías; que algún día podamos mirar hacia atrás y reconocer que no conocimos solamente a quienes éramos al principio, sino también a todas las personas en las que fuimos convirtiéndonos mientras crecíamos juntos.
+</p>
+
+<p>
+Y cuando hablo de conocerte, no me refiero únicamente a las partes bonitas. También están tus grietas, tus inseguridades y esas cosas que te han hecho daño. Quiero aprender a tratarlas con cuidado, nunca utilizarlas en tu contra ni hacerte sentir que tienes que esconder alguna parte de ti para que yo pueda quererte. Puedes ser tú conmigo incluso en esos días en los que no te sientes particularmente increíble.
+</p>
+
+<div class="highlight">
+    <div class="highlight-text">
+        No necesito que seas perfecto para quererte(osea porque nadie lo es ni minimamente). Necesito que seas tú.
+    </div>
+</div>
+
+<p>
+También me gustaría estar para esas cosas pequeñas que quizá nadie consideraría importantes, porque al final son precisamente esas cosas las que terminan formando una vida. Algún día decir “solo un ratito más” cada vez que despertemos, compartir besos en la cocina, hacer juntos la lista de la compra, discutir de manera absurda sobre qué vamos a comer, caminar sin tener que mirar el reloj y quedarnos juntos cuando la tarde se convierta en noche. Hacer cosas completamente normales contigo porque, ahora mismo, esas son precisamente las que más extraño. Escuchar mis canciones favoritas contigo y descubrir cuáles terminarían convirtiéndose en nuestras canciones.
+</p>
+
+<p>
+Me consume el deseo de abrazarte y de poder decirte frente a frente cuánto me importas. Hay momentos en los que solamente quisiera tenerte cerca y quedarme contigo sin pensar en nada más. Y aunque el mundo pueda estar lleno de problemas, de guerras, de hambre, de dolor y de cosas que parecen demasiado grandes para nosotros, el simple pensamiento de estar contigo puede traerme paz y hacerme sonreír. Quizá por eso, cuando pienso en el futuro, no necesito imaginar algo espectacular. No necesito una vida perfecta ni una historia que parezca sacada de una película. Me basta con imaginarte a mi lado en una tarde cualquiera.
+</p>
+
+<p>
+Por ejemplo a veces imagino un cielo demasiado azul, un atardecer con un doble arcoíris y, entre todo eso, lo más bonito: tú a mi lado, tomándome de la mano mientras caminamos juntos hasta el final del verano. Imagino poder verte sonreír en algún momento de la mañana, poder escucharte hablar de cualquier cosa, poder abrazarte cuando algo te duela. Imagino que algún día los kilómetros que ahora parecen tan grandes serán solamente una parte de nuestra historia que podremos recordar. Imagino una vida en la que no tengamos que despedirnos cada vez que termina una visita, en la que un abrazo no sea algo que tenemos que esperar durante semanas o meses.
+</p>
+
+<p>
+Probablemente algún día podamos estar juntos sin que estar juntos sea un acontecimiento extraordinario, que simplemente sea nuestra vida.
+</p>
+
+<p>
+Cuando me preguntan qué es el amor, muchas veces pienso en mí intentando escribir. Porque aunque dejé de escribir hace mucho, contigo me vuelve a nacer la necesidad de hacerlo. Me haces querer encontrar palabras que normalmente no buscaría. Me haces querer escribir poemas aunque no sepa si realmente sé escribirlos. Me nace la necesidad de explicarte algo que probablemente no cabe en ningún texto.
+</p>
+
+<p>
+Decir que te mereces todo se queda corto, porque como mínimo siento que te mereces el mundo y aun así me parecería poco.
+</p>
+
+<div class="highlight">
+    <div class="highlight-text">
+        Tu existencia se convirtió en una de las causas más bonitas de mis suspiros.
+    </div>
+</div>
+
+<p>
+Quizá no necesito encontrar una frase perfecta para explicarte cuánto te amo. Tal vez solamente necesito seguir diciéndotelo de todas las maneras que pueda. Con palabras, con recuerdos, con paciencia, con la forma en la que intento comprenderte, con la forma en la que me importa que estés bien. Porque decir “te amo” no siempre parece suficiente cuando siento que por ti sería capaz de dejarme el aliento intentando explicarlo. Por ti podría quedarme sin voz intentando defender aquello que amo de ti, aunque probablemente ni siquiera necesitarías que lo hiciera. Pero así de grande se siente esto dentro de mí.
+</p>
+
+<p>
+Hay veces en las que pienso que tú eres la vida que le da vida a mi corazón. Todo tuyo es el amor que siento en cada bombeo de mi pecho, cada vez que te escribo, cada vez que te recuerdo. No sé si existe una forma correcta de explicar algo así, pero sí sé que desde que llegaste hay partes de mi vida que se sienten diferentes. Cada día que despierto y te recuerdo parece una pequeña forma de volver a empezar. Como si una versión de mí hubiera quedado atrás y otra hubiera nacido después de conocerte.
+</p>
+
+<p>
+Y quizá eso es lo que amo de ti: que no solamente llegaste a mi vida, sino que cambiaste la forma en la que la miro. Antes de conocerte no sabía que podía extrañar tanto a alguien, ni que una conversación podía cambiarme el ánimo, ni que podía experimentar tanta tranquilidad simplemente hablando con una persona. No sabía cuánto podía significar recibir un mensaje de alguien. No sabía que podía encontrarme pensando en otra persona mientras hago las cosas más normales de mi día.
+</p>
+
+<p>
+A veces incluso quisiera que pudieras aparecer en mis sueños, aunque fuera solamente ahí, y quedarte conmigo por el resto de mi vida. Sé que suena extraño, pero supongo que cuando extrañas demasiado a alguien hasta los sueños parecen una oportunidad para tenerlo cerca.
+</p>
+
+<p>
+Hay una parte de mí que quisiera guardar todo esto para siempre. Si pudiera pedirle algo a la luna cuando no puedo estar contigo, sería precisamente eso: que me deje guardar todos estos recuerdos en lo más profundo de mi corazón, en un lugar donde los kilómetros no puedan tocarlos.
+</p>
+
+<p>
+Si las estrellas pudieran hablar, probablemente te contarían cuánto pienso en ti cuando cae la noche. Son mis cómplices porque muchas veces cuando las miro termino recordándote. Me gusta imaginar que las mismas estrellas que estoy viendo también están sobre ti y que, aunque estemos lejos, por lo menos estamos mirando el mismo cielo.
+</p>
+
+<p>
+Y entonces pienso: si pudieras escucharlas, ¿qué confesión te sorprendería más? ¿La última, en la que les pido que me quieras como yo te quiero, o la primera, cuando cerré los ojos porque apenas comenzaba a pensar en ti y lo único que podía pedir era que estuvieras bien? Creo que incluso antes de entender cuánto ibas a significar para mí ya existía algo que me hacía querer que estuvieras bien. Y ahora esa preocupación se volvió una parte natural de mí.
+</p>
+
+<p>
+A veces me parece extraño que una sola persona pueda convertirse en un lugar seguro dentro de la mente de alguien, pero tú has logrado eso para mí. Eres mi lugar favorito.
+</p>
+
+<p>
+Y sí, a veces tengo miedo. Tengo miedo de perderte, tengo miedo de que el tiempo cambie cosas, tengo miedo de que algún día todo esto pueda convertirse solamente en un recuerdo. Creo que ese miedo existe precisamente porque me importas demasiado. Porque cuando algo se vuelve tan importante para ti, inevitablemente aparece el miedo de que algún día deje de estar.
+</p>
+
+<p>
+No sé qué va a hacer el tiempo con nosotros y tampoco quiero fingir que tengo todas las respuestas. No sé qué ocurrirá dentro de un año, ni dentro de cinco. No sé qué cosas van a cambiar, qué sueños vamos a tener ni qué personas seremos entonces. Pero sí sé algo: después de un año sigo eligiendo sentir todo esto. Incluso cuando a veces es demasiado para mí. Incluso cuando quisiera que todo fuera más fácil.
+</p>
+
+<p>
+Puedo decirte que este año significó muchísimo para mí. Y que incluso cuando la distancia me hace querer escapar de todo lo que siento, no quiero escapar de ti.
+</p>
+
+<p>
+Te amo tanto como no te imaginas. Adoro tu existencia entera y todas esas pequeñas cosas que hacen que seas tú.
+</p>
+
+<p>
+Gracias por elegirme todos los días. Gracias por tenerme paciencia, por escucharme y por quedarte conmigo incluso cuando no soy fácil de entender. Gracias por cada momento en el que simplemente exististe conmigo. Gracias por no hacerme sentir que tenía que ser otra persona para merecer tu cariño.
+</p>
+
+<p>
+Por eso también quiero decirte algo que quizá no digo suficiente: quiero que seas feliz, incluso en las cosas que no tengan que ver conmigo. Me gustaría verte cumplir tus sueños, encontrar cosas que te apasionen y convertirte en la persona que quieres ser. Y si puedo estar cerca para verlo, me hará feliz. No porque quiera que todo en tu vida tenga que incluirme, sino porque me gusta la idea de compartir una parte de ella contigo.
+</p>
+
+<p>
+Y aunque sé que no puedo darte absolutamente todo lo que existe, sí quiero darte lo que esté dentro de mis posibilidades: mi atención, mi cariño, mi honestidad, mis palabras, mi tiempo y todas esas pequeñas formas en las que intento decirte que me importas.
+</p>
+
+<p>
+Quizá por eso hay veces en las que siento que soy completamente tuya, en el sentido de saber que mi corazón te eligió de una manera muy profunda. Te quiero sin rodeos y sin orgullo. Te quiero con todo lo que soy ahora y con todo lo que todavía estoy aprendiendo a ser.
+</p>
+
+<div class="highlight">
+    <div class="highlight-text">
+        Aliméntame de tu corazón, que yo te entrego mi humanidad, mi alma y todo lo que soy.
+    </div>
+</div>
+
+<p>
+Si existe la reencarnación, me gustaría coincidir contigo en esta vida y en la próxima, y en todas las que pudieran existir, solamente para tener la oportunidad de enamorarme de distintas versiones de ti. Porque cuando se trata de ti, siento que nunca sería suficiente el tiempo.
+</p>
+
+<p>
+Hay momentos en los que siento que podría escribir páginas enteras y aun así no terminaría de explicarlo. Podría decirte que eres el amor de todos los latidos de mi corazón, que cada vez que te recuerdo algo dentro de mí se mueve, que cada vez que te escribo siento que estoy intentando acercarme un poquito más a ti. Podría decirte que eres la respuesta a tantas cosas que ni siquiera sabía que estaba buscando. Podría decirte que cuando pienso en ti siento como si hubiera encontrado un lugar donde descansar de todo el ruido. Pero incluso después de escribir todo eso, probablemente seguiría sintiendo que falta algo.
+</p>
+
+<p>
+Porque tú sabes que a veces las palabras no alcanzan. Y quizá por eso quiero que puedas leer entre ellas. Quiero que sepas que detrás de cada “te extraño” hay muchas ganas de tenerte cerca. Que detrás de cada “te amo” hay cientos de pensamientos que no sé cómo explicar. Que detrás de cada mensaje bonito hay una parte de mí intentando hacerte sentir aunque sea un poco de todo lo que tú me haces sentir a mí.
+</p>
+
+<p>
+Y sí, probablemente seguiré diciendo cosas absurdas como que soy 50% microplásticos, 50% neurodivergente y 100% de tu propiedad mi vida, porque evidentemente tengo que mantener un poco de dignidad y de sentido del humor en medio de semejante declaración.
+</p>
+
+<p>
+Si algún día llegamos a viejitos, quiero poder mirar atrás y saber que hubo una versión de nosotros que, a pesar de la distancia, decidió seguir queriendo. Quisiera recordar este primer aniversario como el momento en el que todavía teníamos muchísimo por descubrir.
+</p>
+
+<p>
+Mi deseo es poder pasar todo el tiempo que la vida nos permita juntos.
+</p>
+
+<p>
+Y si alguna vez vuelvo a preguntarme qué es el amor, probablemente voy a pensar en todo esto. En mí escribiendo durante horas porque no encuentro una forma suficientemente grande de decirte lo que siento.
+</p>
+
+<p>
+Gracias por existir en mi vida y por hacerme descubrir una forma de querer que ni siquiera sabía que era capaz de sentir.
+</p>
+
+<p>
+Si pudiera volver al principio sabiendo todo lo que sé ahora, sabiendo cuánto iba a extrañarte, cuánto iba a quererte, cuánto iba a pensar en ti y cuánto iba a cambiar mi manera de ver el amor, aun así volvería a elegir encontrarte.
+</p>
+
+<div class="highlight">
+    <div class="highlight-text">
+        Porque entre tantos caminos posibles, me alegra que el mío haya terminado llevándome hasta ti.
+    </div>
+</div>
+
+<div class="finale">
+    <div class="fireworks" aria-hidden="true"></div>
+
+    <p class="final-message">
+        <span>Feliz primer aniversario, amor.</span><br>
+        <small>Espero que este sea solamente el primero de muchos momentos que todavía nos quedan por vivir.</small>
+    </p>
+</div>
+
+</article>
+
+
+</main>
+
+
+<script>
+
+/* =========================================================
+   ELEMENTOS
+========================================================= */
+
+const body =
+    document.body;
+
+const cover =
+    document.getElementById("cover");
+
+const openButton =
+    document.getElementById("openButton");
+
+const main =
+    document.getElementById("letterMain");
+
+const progressBar =
+    document.querySelector(".progress-bar");
+
+const fallingStars =
+    document.getElementById("fallingStars");
+
+
+/* =========================================================
+   NO RESTAURAR SCROLL AL RECARGAR
+========================================================= */
+
+if("scrollRestoration" in history){
+    history.scrollRestoration = "manual";
+}
+
+
+/* =========================================================
+   CREAR LLUVIA DE ESTRELLAS
+========================================================= */
+
+function createFallingStars(){
+
+    fallingStars.innerHTML = "";
+
+    const amount =
+        window.innerWidth < 700
+        ? 65
+        : 100;
+
+    for(let i = 0; i < amount; i++){
+
+        const star =
+            document.createElement("span");
+
+        star.className =
+            "falling-star";
+
+        const size =
+            Math.random() * 3 + 1;
+
+        const left =
+            Math.random() * 100;
+
+        const duration =
+            Math.random() * 5 + 4;
+
+        const delay =
+            Math.random() * 8;
+
+        const drift =
+            (Math.random() * 160 - 80) + "px";
+
+        star.style.width =
+            size + "px";
+
+        star.style.height =
+            size + "px";
+
+        star.style.left =
+            left + "%";
+
+        star.style.animationDuration =
+            duration + "s";
+
+        star.style.animationDelay =
+            "-" + delay + "s";
+
+        star.style.setProperty(
+            "--drift",
+            drift
+        );
+
+        star.style.opacity =
+            .35 + Math.random() * .6;
+
+        fallingStars.appendChild(star);
+    }
+}
+
+createFallingStars();
+
+
+/* =========================================================
+   REINICIAR COMPLETAMENTE
+========================================================= */
+
+function resetPage(){
+
+    body.classList.remove("unlocked");
+    body.classList.add("locked");
+
+    cover.classList.remove("opened");
+    cover.classList.remove("hidden");
+
+    cover.style.display =
+        "flex";
+
+    cover.style.visibility =
+        "visible";
+
+    cover.style.opacity =
+        "1";
+
+    cover.style.transform =
+        "scale(1)";
+
+    main.style.visibility =
+        "hidden";
+
+    main.style.opacity =
+        "0";
+
+    progressBar.style.width =
+        "0%";
+
+    openButton.disabled =
+        false;
+
+    window.scrollTo(0,0);
+}
+
+
+/* =========================================================
+   CARGA / F5
+========================================================= */
+
+function resetOnLoad(){
+
+    resetPage();
+
+    requestAnimationFrame(() => {
+        window.scrollTo(0,0);
+    });
+
+    setTimeout(() => {
+        window.scrollTo(0,0);
+    },100);
+}
+
+window.addEventListener(
+    "pageshow",
+    resetOnLoad
+);
+
+window.addEventListener(
+    "load",
+    resetOnLoad
+);
+
+
+/* =========================================================
+   ABRIR CARTA
+========================================================= */
+
+openButton.addEventListener(
+    "click",
+    () => {
+
+        if(
+            !body.classList.contains("locked")
+        ){
+            return;
+        }
+
+        openButton.disabled =
+            true;
+
+        createParticles();
+
+        cover.classList.add(
+            "opened"
+        );
+
+        /*
+         * Primero dejamos que la portada
+         * haga su animación.
+         */
+
+        setTimeout(() => {
+
+            /*
+             * AQUÍ se elimina de verdad
+             * la portada visualmente.
+             */
+
+            cover.classList.add(
+                "hidden"
+            );
+
+            body.classList.remove(
+                "locked"
+            );
+
+            body.classList.add(
+                "unlocked"
+            );
+
+            main.style.visibility =
+                "visible";
+
+            main.style.opacity =
+                "1";
+
+            window.scrollTo(
+                0,
+                0
+            );
+
+        },850);
+
+    }
+);
+
+
+/* =========================================================
+   PARTICULAS DEL BOTÓN
+========================================================= */
+
+function createParticles(){
+
+    const rect =
+        openButton.getBoundingClientRect();
+
+    const centerX =
+        rect.left +
+        rect.width / 2;
+
+    const centerY =
+        rect.top +
+        rect.height / 2;
+
+    for(
+        let i = 0;
+        i < 90;
+        i++
+    ){
+
+        const particle =
+            document.createElement(
+                "div"
+            );
+
+        particle.className =
+            "particle";
+
+        const angle =
+            Math.random() *
+            Math.PI * 2;
+
+        const distance =
+            80 +
+            Math.random() * 400;
+
+        const x =
+            Math.cos(angle) *
+            distance;
+
+        const y =
+            Math.sin(angle) *
+            distance;
+
+        particle.style.left =
+            centerX + "px";
+
+        particle.style.top =
+            centerY + "px";
+
+        particle.style.setProperty(
+            "--x",
+            x + "px"
+        );
+
+        particle.style.setProperty(
+            "--y",
+            y + "px"
+        );
+
+        const size =
+            2 +
+            Math.random() * 5;
+
+        particle.style.width =
+            size + "px";
+
+        particle.style.height =
+            size + "px";
+
+        document.body.appendChild(
+            particle
+        );
+
+        setTimeout(() => {
+            particle.remove();
+        },1500);
+    }
+}
+
+
+/* =========================================================
+   ANIMACIONES DEL TEXTO
+========================================================= */
+
+const animatedElements =
+    document.querySelectorAll(
+        ".letter p, .highlight"
+    );
+
+const observer =
+    new IntersectionObserver(
+        entries => {
+
+            entries.forEach(
+                entry => {
+
+                    if(
+                        entry.isIntersecting
+                    ){
+
+                        entry.target.classList.add(
+                            "visible"
+                        );
+
+                        observer.unobserve(
+                            entry.target
+                        );
+                    }
+
+                }
+            );
+
+        },
+        {
+            threshold:.10
+        }
+    );
+// FUEGOS ARTIFICIALES
+const fireworksContainer = document.querySelector('.fireworks');
+
+function createFirework(x, y, delay = 0) {
+    const firework = document.createElement('div');
+    firework.className = 'firework';
+
+    firework.style.left = x + '%';
+    firework.style.top = y + '%';
+    firework.style.animationDelay = delay + 'ms';
+
+    fireworksContainer.appendChild(firework);
+
+    setTimeout(() => {
+        firework.remove();
+    }, 2200 + delay);
+}
+
+function launchFireworks() {
+    if (!fireworksContainer) return;
+
+    fireworksContainer.innerHTML = '';
+
+    createFirework(18, 35, 0);
+    createFirework(82, 30, 300);
+    createFirework(30, 70, 650);
+    createFirework(70, 68, 900);
+    createFirework(50, 25, 1200);
+}
+
+
+// OBSERVER DEL FINAL
+const finaleObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            launchFireworks();
+        }
+    });
+}, {
+    threshold: 0.5
+});
+
+const finale = document.querySelector('.finale');
+
+if (finale) {
+    finaleObserver.observe(finale);
+}
+animatedElements.forEach(
+    element => {
+
+        observer.observe(
+            element
+        );
+
+    }
+);
+
+
+/* =========================================================
+   PROGRESO DE LECTURA
+========================================================= */
+
+window.addEventListener(
+    "scroll",
+    () => {
+
+        if(
+            body.classList.contains(
+                "locked"
+            )
+        ){
+            return;
+        }
+
+        const scrollTop =
+            window.scrollY;
+
+        const documentHeight =
+            document.documentElement
+                .scrollHeight
+            - window.innerHeight;
+
+        if(
+            documentHeight <= 0
+        ){
+            progressBar.style.width =
+                "0%";
+
+            return;
+        }
+
+        const progress =
+            Math.min(
+                100,
+                Math.max(
+                    0,
+                    (
+                        scrollTop /
+                        documentHeight
+                    ) * 100
+                )
+            );
+
+        progressBar.style.width =
+            progress + "%";
+    }
+);
+
+
+/* =========================================================
+   PARALLAX DE LA LUNA
+========================================================= */
+
+window.addEventListener(
+    "scroll",
+    () => {
+
+        const moon =
+            document.querySelector(
+                ".moon"
+            );
+
+        if(!moon){
+            return;
+        }
+
+        const y =
+            window.scrollY * .08;
+
+        moon.style.transform =
+            `translateY(${y}px)`;
+
+    }
+);
+
+
+/* =========================================================
+   IMPEDIR SCROLL ANTES DE ABRIR
+========================================================= */
+
+window.addEventListener(
+    "wheel",
+    event => {
+
+        if(
+            body.classList.contains(
+                "locked"
+            )
+        ){
+
+            event.preventDefault();
+        }
+
+    },
+    {
+        passive:false
+    }
+);
+
+
+window.addEventListener(
+    "touchmove",
+    event => {
+
+        if(
+            body.classList.contains(
+                "locked"
+            )
+        ){
+
+            event.preventDefault();
+        }
+
+    },
+    {
+        passive:false
+    }
+);
+
+
+window.addEventListener(
+    "keydown",
+    event => {
+
+        if(
+            !body.classList.contains(
+                "locked"
+            )
+        ){
+            return;
+        }
+
+        const blockedKeys = [
+            "ArrowDown",
+            "ArrowUp",
+            "PageDown",
+            "PageUp",
+            "Home",
+            "End",
+            " "
+        ];
+
+        if(
+            blockedKeys.includes(
+                event.key
+            )
+        ){
+
+            event.preventDefault();
+        }
+
+    }
+);
+
+</script>
+
+</body>
+</html>
